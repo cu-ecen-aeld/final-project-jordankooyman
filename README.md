@@ -8,7 +8,9 @@
 
 ## Project Overview
 
-This repository contains the Buildroot configuration and build system for a userspace display library targeting the **LDT LD7138** 128x128 pixel 65K-color OLED display controller. The library enables a Raspberry Pi 4 Model B to drive the LD7138 over SPI using Linux's `spidev` kernel driver and `libgpiod` for GPIO control.
+This repository contains the Buildroot configuration and build system for a userspace display library targeting the ~~**LDT LD7138** 128x128 pixel 65K-color OLED~~ ILI9488 display controller. The library enables a Raspberry Pi 4 Model B to drive the display over SPI using Linux's `spidev` kernel driver and `libgpiod` for GPIO control.
+
+LD7138 driver was the original target for this project, but due to the lack of available documentation and difficulty in board bring-up, this project has pivoted to using a different SPI-interfaced display with the ILI9488 driver. The work put towards the LD7138 is still being considered part of this project, most of sprint 1, and extensive documentation has been produced to expand the available knowledge base on this display, but to ensure a project can be completed in the remaining 2 sprints with something to demo, the fallback plan has been invoked.
 
 **For complete project details, see the [Project Overview Wiki Page](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview)**
 
@@ -18,7 +20,8 @@ This repository contains the Buildroot configuration and build system for a user
 
 - **Project Overview:** [Wiki - Project Overview](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview)
 - **Schedule & Issues:** [Wiki - Schedule](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Schedule)
-- **Library Source Code:** [ld7138-userspace-driver repository](https://github.com/jordankooyman/ld7138-userspace-driver)
+- **LD7138 Source Code:** [ld7138-userspace-driver repository](https://github.com/jordankooyman/ld7138-userspace-driver)
+- **ILI9488 Source Code:** [ili9488-userspace-driver repository](https://github.com/jordankooyman/ili9488-userspace-driver)
 - **Project Board:** [Sprint Schedule](https://github.com/users/jordankooyman/projects/1)
 
 ## Repository Structure (To Be Updated)
@@ -30,9 +33,9 @@ final-project-jordankooyman/
 │   ├── Config.in
 │   ├── external.mk
 │   └── package/
-│       └── ld7138/              # LD7138 library package
+│       └── ili9488/              # ILI9488 library package
 │           ├── Config.in
-│           └── ld7138.mk
+│           └── ili9488.mk
 └── docs/
     └── wiring.md                # RPi4B GPIO pin mapping
 ```
@@ -40,12 +43,12 @@ final-project-jordankooyman/
 ## Hardware
 
 - **Platform:** Raspberry Pi 4 Model B
-- **Display:** LDT LD7138 OLED Controller (128x128 RGB, 65K color)
-- **Interface:** SPI (via `/dev/spidev0.0`) + GPIO (A0, RSTB via `libgpiod`)
+- **Display:** ~~Transparent OLED with LDT LD7138 OLED Controller~~ 3.5" LCD with ILI9488 Driver IC
+- **Interface:** SPI (via `/dev/spidev0.0`) + GPIO (Reset via `libgpiod`)
 
 ## Build System
 
-This project uses **Buildroot** to create a minimal embedded Linux image for the Raspberry Pi 4B. The LD7138 userspace library is built and deployed via a custom Buildroot external package.
+This project uses **Buildroot** to create a minimal embedded Linux image for the Raspberry Pi 4B. The ILI9488 userspace library is built and deployed via a custom Buildroot external package.
 
 ### Building the Image (To Be Updated)
 
@@ -80,9 +83,6 @@ make -j$(nproc)
 ```bash
 # Linux:
 sudo dd if=output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
-
-# macOS:
-sudo dd if=output/images/sdcard.img of=/dev/rdiskN bs=4m && sync
 ```
 
 ## Development
@@ -93,17 +93,12 @@ Initial development is performed on **Raspberry Pi OS** for rapid iteration befo
 
 The library is split into three layers:
 
-1. **Graphics Layer** (`ld7138_gfx.c`) - Software framebuffer and drawing primitives
-2. **HAL Layer** (`ld7138_hal.c`) - LD7138-specific command encoding and initialization
-3. **SPI/GPIO Abstraction** (`ld7138_spi_linux.c`) - Platform-specific `spidev` and `libgpiod` calls
+1. **Graphics Layer** (`ili9488_gfx.c`) - Software framebuffer and drawing primitives
+2. **HAL Layer** (`ili9488_hal.c`) - LD7138-specific command encoding and initialization
+3. **SPI/GPIO Abstraction** (`ili9488_spi_linux.c`) - Platform-specific `spidev` and `libgpiod` calls
 
 See the [System Architecture Diagram](../../wiki/Project-Overview#system-architecture-diagram) in the Project Overview.
 
 ## AI Assistance Disclosure
 
 AI tools (Claude by Anthropic) were used in planning and drafting project documentation. See the [AI Assistance Log](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview#ai-assistance-log) for details.
-
----
-
-**Status:** Sprint 1 - In Progress  
-**Last Updated:** March 9, 2026
