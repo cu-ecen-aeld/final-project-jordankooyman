@@ -1,4 +1,4 @@
-# AESD Final Project - LD7138 OLED Display User Space Driver
+# AESD Final Project - SPI Display User Space Driver
 
 **Author:** [Jordan Kooyman](https://github.com/jordankooyman)
 
