@@ -1,2 +1,2 @@
-name: assignment_base
-description: Base customization for assignment
+name: SPI_DISPLAY
+desc: Userspace SPI Display Driver external Buildroot Tree

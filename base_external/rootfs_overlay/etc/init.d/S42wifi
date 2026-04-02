@@ -1,0 +1,28 @@
+#!/bin/sh
+
+DAEMON="wpa_supplicant"
+IFACE="wlan0"
+CONF="/etc/wpa_supplicant/wpa_supplicant.conf"
+
+case "$1" in
+  start)
+    echo "Starting $DAEMON on $IFACE..."
+    $DAEMON -B -i "$IFACE" -c "$CONF"
+    sleep 2
+    udhcpc -i "$IFACE" -b -q
+    ;;
+  stop)
+    echo "Stopping $DAEMON..."
+    killall $DAEMON
+    ;;
+  restart)
+    "$0" stop
+    "$0" start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0

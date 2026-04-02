@@ -1,0 +1,3 @@
+dtparam=spi=on
+gpu_mem=16
+enable_uart=1

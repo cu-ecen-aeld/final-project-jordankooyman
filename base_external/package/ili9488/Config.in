@@ -1,0 +1,7 @@
+config BR2_PACKAGE_ILI9488
+    bool "ili9488 SPI LCD display library and demo"
+    depends on BR2_PACKAGE_LIBGPIOD
+    help
+      Userspace library and demo application for the ILI9488
+      LCD display controller IC, communicating via spidev and
+      libgpiod.
