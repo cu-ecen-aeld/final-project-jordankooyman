@@ -4,6 +4,9 @@ set -e
 # Copy our custom config.txt into the firmware directory
 cp "$BR2_EXTERNAL_SPI_DISPLAY_PATH/board/rpi4/config.txt" "$BINARIES_DIR/rpi-firmware/config.txt"
 
+# Copy our custom cmdline.txt into the firmware directory
+cp "$BR2_EXTERNAL_SPI_DISPLAY_PATH/board/rpi4/cmdline.txt" "$BINARIES_DIR/rpi-firmware/cmdline.txt"
+
 # Call the standard Buildroot RPi4 post-image script to run genimage
 # and assemble the final sdcard.img
 "$BR2_EXTERNAL_SPI_DISPLAY_PATH/../buildroot/board/raspberrypi4-64/post-image.sh" "$@"

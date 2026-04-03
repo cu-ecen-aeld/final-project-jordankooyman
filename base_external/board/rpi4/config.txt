@@ -1,4 +1,5 @@
 dtparam=spi=on
-gpu_mem=16
+gpu_mem=64
 enable_uart=1
+arm_64bit=1
 kernel=Image
