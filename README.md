@@ -1,20 +1,10 @@
-# AESD Final Project - SPI Display User Space Driver
+# ECEN 5713 Final Project -- ILI9488 SPI Display Driver on Buildroot
 
-**Author:** [Jordan Kooyman](https://github.com/jordankooyman)
+**Author:** Jordan Kooyman
 
-**Course:** ECEN 5713 - Advanced Embedded Software Development -- Spring 2026
+**Course:** ECEN 5713 - Advanced Embedded Software Development, Spring 2026
 
 **Institution:** University of Colorado Boulder
-
-## Project Overview
-
-This repository contains the Buildroot configuration and build system for a userspace display library targeting the ~~**LDT LD7138** 128x128 pixel 65K-color OLED~~ ILI9488 display controller. The library enables a Raspberry Pi 4 Model B to drive the display over SPI using Linux's `spidev` kernel driver and `libgpiod` for GPIO control.
-
-LD7138 driver was the original target for this project, but due to the lack of available documentation and difficulty in board bring-up, this project has pivoted to using a different SPI-interfaced display with the ILI9488 driver. The work put towards the LD7138 is still being considered part of this project, most of sprint 1, and extensive documentation has been produced to expand the available knowledge base on this display, but to ensure a project can be completed in the remaining 2 sprints with something to demo, the fallback plan has been invoked.
-
-**For complete project details, see the [Project Overview Wiki Page](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview)**
-
-**For sprint schedule and task tracking, see the [Schedule Wiki Page](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Schedule)**
 
 ## Quick Links
 
@@ -24,81 +14,91 @@ LD7138 driver was the original target for this project, but due to the lack of a
 - **ILI9488 Source Code:** [ili9488-userspace-driver repository](https://github.com/jordankooyman/ili9488-userspace-driver)
 - **Project Board:** [Sprint Schedule](https://github.com/users/jordankooyman/projects/1)
 
-## Repository Structure (To Be Updated)
+---
 
-```
-final-project-jordankooyman/
-├── README.md                    # This file
-├── buildroot-external/          # Buildroot external tree
-│   ├── Config.in
-│   ├── external.mk
-│   └── package/
-│       └── ili9488/              # ILI9488 library package
-│           ├── Config.in
-│           └── ili9488.mk
-└── docs/
-    └── wiring.md                # RPi4B GPIO pin mapping
-```
+## Overview
+
+This project implements a userspace SPI display driver for the ILI9488 LCD controller running on a Raspberry Pi 4B under a custom Buildroot Linux image. The driver communicates with the display over SPI using the kernel's `spidev` interface, with GPIO handled through `libgpiod` v2.
+
+The original target for this project was the LDT LD7138 128x64 OLED display. Sprint 1 was spent on hardware bring-up for that display, which proved extremely difficult due to the near-total absence of available documentation and datasheet clarity on the initialization sequence. Significant debugging work was done and documented to expand the available knowledge base on that controller, but with two sprints remaining and a working demo required, the project pivoted to the ILI9488, which has broad community support and clear documentation. The LD7138 work is still counted as part of the project.
 
 ## Hardware
 
-- **Platform:** Raspberry Pi 4 Model B
-- **Display:** ~~Transparent OLED with LDT LD7138 OLED Controller~~ 3.5" LCD with ILI9488 Driver IC
-- **Interface:** SPI (via `/dev/spidev0.0`) + GPIO (Reset via `libgpiod`)
+- **Platform:** Raspberry Pi 4 Model B (BCM2711, aarch64)
+- **Display:** 3.5 inch LCD with ILI9488 driver IC
+- **SPI device:** `/dev/spidev0.0`
+- **GPIO:** Reset line controlled via `libgpiod`
+
+Wiring details are documented in `docs/wiring.md` in the ILI9488 or LD7138 repositories.
+
+[PLACEHOLDER: add wiring diagram or pin table here if desired]
+
+## Repository Structure
+final-project-jordankooyman/
+├── base_external/               # Buildroot external tree
+│   ├── board/rpi4/              # Boot config, cmdline, post-image script
+│   ├── configs/                 # Buildroot defconfig
+│   ├── package/ili9488/         # Custom Buildroot package for the driver
+│   ├── patches/libgpiod/        # libgpiod v2 package files (overrides v1)
+│   └── rootfs_overlay/          # Files copied into the rootfs at build time
+│       └── etc/
+│           ├── init.d/S99ili9488  # Autostart script for the demo
+│           └── inittab
+├── build.sh                     # Full build script (submodule init + make)
+├── clean.sh                     # Clean build output
+├── restore-libgpiod.sh          # Copies libgpiod v2 files into buildroot tree
+├── save-libgpiod.sh             # Saves current libgpiod files back to patches/
+├── shared.sh                    # Common variables used by build scripts
+└── README.md
 
 ## Build System
 
-This project uses **Buildroot** to create a minimal embedded Linux image for the Raspberry Pi 4B. The ILI9488 userspace library is built and deployed via a custom Buildroot external package.
+The image is built with Buildroot 2024.02.13 using an external tree (`base_external`). The Buildroot submodule is pinned to the `2024.02.13` tag. One manual workaround is required: Buildroot 2024.02 ships libgpiod v1.6.4, but this project needs v2. The package files have been manually updated and saved to `base_external/patches/libgpiod/`. The build script handles restoring them automatically.
 
-### Building the Image (To Be Updated)
-
+### Building
 ```bash
-# Clone this repository
-git clone https://github.com/cu-ecen-aeld/final-project-assignment-jordankooyman.git
-cd final-project-assignment-jordankooyman
-
-# Download Buildroot (specify version used)
-wget https://buildroot.org/downloads/buildroot-2024.02.tar.gz
-tar -xzf buildroot-2024.02.tar.gz
-cd buildroot-2024.02
-
-# Configure for Raspberry Pi 4 64-bit
-make raspberrypi4_64_defconfig
-
-# Point to external tree
-export BR2_EXTERNAL=../buildroot-external
-
-# Enable LD7138 package in menuconfig
-make menuconfig
-# Navigate to: External options → ld7138 library and demo
-
-# Build
-make -j$(nproc)
-
-# Image output: output/images/sdcard.img
+git clone https://github.com/cu-ecen-aeld/final-project-jordankooyman.git
+cd final-project-jordankooyman
+git submodule update --init
+./build.sh
 ```
 
-### Flashing to SD Card (To Be Updated)
+The build script will initialize the submodule, restore the libgpiod v2 package files, apply the defconfig, and run `make`. The finished image is at `buildroot/output/images/sdcard.img`.
 
+Build time on a modern machine with a warm cache is roughly [PLACEHOLDER: fill in approximate build time]. A cold build with no cached downloads takes longer due to fetching the kernel tarball and toolchain.
+
+### Flashing
+
+Flash with Balena Etcher on Windows or `dd` on Linux:
 ```bash
-# Linux:
-sudo dd if=output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=buildroot/output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
 ```
 
-## Development
+No manual edits to the SD card are needed after flashing. All configuration is applied at build time by `post-image.sh` and the rootfs overlay.
 
-Initial development is performed on **Raspberry Pi OS** for rapid iteration before migrating to Buildroot.
+### Serial Console
 
-## Architecture (To Be Updated)
+If you need a login prompt over serial during development:
 
-The library is split into three layers:
+- Connect a USB-to-TTL adapter to Pi header pins 6 (GND), 8 (TX), 10 (RX)
+- 115200 baud, 8N1, no flow control
+- The console is on `ttyS0` (the mini UART, not the PL011)
 
-1. **Graphics Layer** (`ili9488_gfx.c`) - Software framebuffer and drawing primitives
-2. **HAL Layer** (`ili9488_hal.c`) - LD7138-specific command encoding and initialization
-3. **SPI/GPIO Abstraction** (`ili9488_spi_linux.c`) - Platform-specific `spidev` and `libgpiod` calls
+## Runtime Behavior
 
-See the [System Architecture Diagram](../../wiki/Project-Overview#system-architecture-diagram) in the Project Overview.
+On boot the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
+
+SSH is available via Dropbear. The root password is `root`. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
+
+## Development Notes
+
+- Initial driver development was done on Raspberry Pi OS for fast iteration before moving to Buildroot
+- libgpiod v2 API is used throughout; v1 is not compatible with this codebase
+- `spidev` is enabled via `dtparam=spi=on` in `config.txt`; this is present in the source tree and applied automatically at build time
+- The Buildroot defconfig does not include wpa_supplicant or any wireless packages
+
+[PLACEHOLDER: add any notes about driver architecture, known limitations, or next steps here]
 
 ## AI Assistance Disclosure
 
-AI tools (Claude by Anthropic) were used in planning and drafting project documentation. See the [AI Assistance Log](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview#ai-assistance-log) for details.
+AI tools (Claude by Anthropic) were used during debugging, documentation drafting, and build system troubleshooting. See the [AI Assistance Log](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview#ai-assistance-log) for details.
