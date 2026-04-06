@@ -72,6 +72,8 @@ Flash with Balena Etcher on **Windows** or `dd` on **Linux**:
 sudo dd if=buildroot/output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
 ```
 
+The image should be about 160MB, so flashing should be fast and any microSD card over 1GB should work without issue.
+
 No manual edits to the SD card are needed after flashing. All configuration is applied at build time by `post-image.sh` and the rootfs overlay.
 
 ### Serial Console
