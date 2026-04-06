@@ -1,17 +1,23 @@
 #!/bin/bash
-#Script to build buildroot configuration
+#Script to build buildroot configuration and restore updated LIBGPIOD V2 Library
 #Author: Siddhant Jajoo, modified for the RPi 4 by Jordan Kooyman
-
 source shared.sh
-
 EXTERNAL_REL_BUILDROOT=../base_external
 git submodule init
 git submodule sync
 git submodule update
 
+# Restore libgpiod v2 package files over the v1 files shipped with buildroot
+if [ ! -d buildroot/package/libgpiod ]; then
+    echo "ERROR: buildroot submodule did not initialize correctly"
+    exit 1
+fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cp "$SCRIPT_DIR/base_external/patches/libgpiod/"* "$SCRIPT_DIR/buildroot/package/libgpiod/"
+echo "Restored libgpiod package files to buildroot/package/libgpiod/"
+
 set -e 
 cd `dirname $0`
-
 if [ ! -e buildroot/.config ]
 then
     echo "MISSING BUILDROOT CONFIGURATION FILE"
