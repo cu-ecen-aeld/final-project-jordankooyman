@@ -101,4 +101,14 @@ SSH is available via Dropbear. The root password is `root`. Ethernet will attemp
 
 ## AI Assistance Disclosure
 
-AI tools (Claude by Anthropic) were used during debugging, documentation drafting, and build system troubleshooting. See the [AI Assistance Log](https://github.com/cu-ecen-aeld/final-project-jordankooyman/wiki/Project-Overview#ai-assistance-log) for details.
+AI tools (Claude by Anthropic) were used during debugging, documentation drafting, and build system troubleshooting.
+
+Links to AI chatbot conversations used in developing this document:
+
+| Date | Tool | Topic / Link |
+|------|------|-------------|
+| 2026-03-06 | Claude (claude.ai) | Initial readme write - [https://claude.ai/share/a267eef2-ef16-4761-8308-0fcea6868335](https://claude.ai/share/a267eef2-ef16-4761-8308-0fcea6868335) |
+| 2026-04-02 | Claude (claude.ai) | Initial Buildroot setup and debugging | [https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6](https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6)
+| 2026-04-03 | Claude (claude.ai) | Continued Buildroot debugging | [https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498}](https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498)
+| 2026-04-06 | Claude (claude.ai) | Finished Buildroot debugging and readme update | [https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48](https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48)
+| | | |
