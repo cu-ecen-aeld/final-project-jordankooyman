@@ -87,7 +87,7 @@ If you need a login prompt over serial during development:
 
 ## Runtime Behavior
 
-On boot the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
+The system takes approximately 5-10secs to boot fully. On boot the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
 
 SSH is available via Dropbear. The root password is `root`. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
 
