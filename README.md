@@ -59,7 +59,6 @@ The image is built with Buildroot 2024.02.13 using an external tree (`base_exter
 ```bash
 git clone https://github.com/cu-ecen-aeld/final-project-jordankooyman.git
 cd final-project-jordankooyman
-git submodule update --init
 ./build.sh   # Initialize the Buildroot submodule with custom configurations
 ./build.sh   # Run the Buildroot build
 ```
