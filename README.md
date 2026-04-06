@@ -31,9 +31,8 @@ The original target for this project was the LDT LD7138 128x64 OLED display. Spr
 
 Wiring details are documented in `docs/wiring.md` in the ILI9488 or LD7138 repositories.
 
-[PLACEHOLDER: add wiring diagram or pin table here if desired]
-
 ## Repository Structure
+```
 final-project-jordankooyman/
 ├── base_external/               # Buildroot external tree
 │   ├── board/rpi4/              # Boot config, cmdline, post-image script
@@ -50,6 +49,7 @@ final-project-jordankooyman/
 ├── save-libgpiod.sh             # Saves current libgpiod files back to patches/
 ├── shared.sh                    # Common variables used by build scripts
 └── README.md
+```
 
 ## Build System
 
@@ -60,16 +60,21 @@ The image is built with Buildroot 2024.02.13 using an external tree (`base_exter
 git clone https://github.com/cu-ecen-aeld/final-project-jordankooyman.git
 cd final-project-jordankooyman
 git submodule update --init
-./build.sh
+./build.sh   # Initialize the Buildroot submodule with custom configurations
+./build.sh   # Run the Buildroot build
 ```
 
 The build script will initialize the submodule, restore the libgpiod v2 package files, apply the defconfig, and run `make`. The finished image is at `buildroot/output/images/sdcard.img`.
 
-Build time on a modern machine with a warm cache is roughly [PLACEHOLDER: fill in approximate build time]. A cold build with no cached downloads takes longer due to fetching the kernel tarball and toolchain.
+Full build time on a modern machine is roughly 1hr.
 
 ### Flashing
 
-Flash with Balena Etcher on Windows or `dd` on Linux:
+Flash with Balena Etcher on Windows
+
+or
+
+`dd` on Linux:
 ```bash
 sudo dd if=buildroot/output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
 ```
