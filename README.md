@@ -18,9 +18,7 @@
 
 ## Overview
 
-This project implements a userspace SPI display driver for the ILI9488 LCD controller running on a Raspberry Pi 4B under a custom Buildroot Linux image. The driver communicates with the display over SPI using the kernel's `spidev` interface, with GPIO handled through `libgpiod` v2.
-
-The original target for this project was the LDT LD7138 128x64 OLED display. Sprint 1 was spent on hardware bring-up for that display, which proved extremely difficult due to the near-total absence of available documentation and datasheet clarity on the initialization sequence. Significant debugging work was done and documented to expand the available knowledge base on that controller, but with two sprints remaining and a working demo required, the project pivoted to the ILI9488, which has broad community support and clear documentation. The LD7138 work is still counted as part of the project.
+This project implements a userspace SPI display driver for the ILI9488 LCD controller running on a Raspberry Pi 4B under a custom Buildroot Linux image. The driver communicates with the display over SPI using the kernel's `spidev` interface, with GPIO handled through `libgpiod` v2. A demo is included that showcases some basic graphics functions on the display that is run automatically upon boot from this custom linux image.
 
 ## Hardware
 
@@ -69,11 +67,7 @@ Full build time on a modern machine is roughly 1hr.
 
 ### Flashing
 
-Flash with Balena Etcher on Windows
-
-or
-
-`dd` on Linux:
+Flash with Balena Etcher on **Windows** or `dd` on **Linux**:
 ```bash
 sudo dd if=buildroot/output/images/sdcard.img of=/dev/sdX bs=4M status=progress && sync
 ```
@@ -87,6 +81,7 @@ If you need a login prompt over serial during development:
 - Connect a USB-to-TTL adapter to Pi header pins 6 (GND), 8 (TX), 10 (RX)
 - 115200 baud, 8N1, no flow control
 - The console is on `ttyS0` (the mini UART, not the PL011)
+  - This configuration means the CPU Clock speed is fixed in this image
 
 ## Runtime Behavior
 
@@ -100,8 +95,6 @@ SSH is available via Dropbear. The root password is `root`. Ethernet will attemp
 - libgpiod v2 API is used throughout; v1 is not compatible with this codebase
 - `spidev` is enabled via `dtparam=spi=on` in `config.txt`; this is present in the source tree and applied automatically at build time
 - The Buildroot defconfig does not include wpa_supplicant or any wireless packages
-
-[PLACEHOLDER: add any notes about driver architecture, known limitations, or next steps here]
 
 ## AI Assistance Disclosure
 
