@@ -61,9 +61,11 @@ cd final-project-jordankooyman
 ./build.sh   # Run the Buildroot build
 ```
 
-The build script will initialize the submodule, restore the libgpiod v2 package files, apply the defconfig, and run `make`. The finished image is at `buildroot/output/images/sdcard.img`.
+The build script will initialize the submodule, restore the libgpiod v2 package files, apply the defconfig, and run `make`. 
 
-Full build time on a modern machine is roughly 1hr.
+The finished image is at `final-project-jordankooyman/buildroot/output/images/sdcard.img`.
+
+Full build time from scratch on a modern machine is roughly 1hr.
 
 ### Flashing
 
@@ -87,7 +89,9 @@ If you need a login prompt over serial during development:
 
 ## Runtime Behavior
 
-The system takes approximately 5-10secs to boot fully. On boot the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
+The system takes approximately 5-10secs to boot fully. Until then, the display will be a solid white. After boot, the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. 
+
+The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
 
 SSH is available via Dropbear. The root password is `root`. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
 
@@ -107,7 +111,7 @@ Links to AI chatbot conversations used in developing this document:
 | Date | Tool | Topic / Link |
 |------|------|-------------|
 | 2026-03-06 | Claude (claude.ai) | Initial readme write - [https://claude.ai/share/a267eef2-ef16-4761-8308-0fcea6868335](https://claude.ai/share/a267eef2-ef16-4761-8308-0fcea6868335) |
-| 2026-04-02 | Claude (claude.ai) | Initial Buildroot setup and debugging | [https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6](https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6)
-| 2026-04-03 | Claude (claude.ai) | Continued Buildroot debugging | [https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498}](https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498)
-| 2026-04-06 | Claude (claude.ai) | Finished Buildroot debugging and readme update | [https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48](https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48)
+| 2026-04-02 | Claude (claude.ai) | Initial Buildroot setup and debugging - [https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6](https://claude.ai/share/30d3d80e-4795-430b-9278-814be31f25f6) |
+| 2026-04-03 | Claude (claude.ai) | Continued Buildroot debugging - [https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498}](https://claude.ai/share/7f38c970-0998-4f8d-87c0-b5c361285498) |
+| 2026-04-06 | Claude (claude.ai) | Finished Buildroot debugging and readme update - [https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48](https://claude.ai/share/e93e1767-dc2a-484a-8f0f-29c3b7d0ae48) |
 | | | |
