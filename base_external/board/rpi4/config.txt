@@ -1,4 +1,4 @@
-#dtparam=spi=on
+dtparam=spi=on
 gpu_mem=64
 enable_uart=1
 arm_64bit=1
