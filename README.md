@@ -91,7 +91,12 @@ If you need a login prompt over serial during development:
 
 The system takes approximately 5-10secs to boot fully. Until then, the display will be a solid white. After boot, the system starts the ILI9488 demo automatically via `/etc/init.d/S99ili9488`. 
 
-The demo [PLACEHOLDER: describe what the demo does -- color fill, pattern, image, etc.].
+The demo runs continuously and cycles through:
+
+1. A moving dirty-region rectangle and moving pixel
+2. Brief full-screen color fills
+3. A center-out starburst line sweep
+4. Additional full-screen color fills
 
 SSH is available via Dropbear. The root password is `root`. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
 
