@@ -1,4 +1,4 @@
-ILI9488_VERSION = adb8c24
+ILI9488_VERSION = 6aacb1e
 ILI9488_SITE = git@github.com:jordankooyman/ili9488-userspace-driver.git
 ILI9488_SITE_METHOD = git
 ILI9488_GIT_SUBMODULES = YES
