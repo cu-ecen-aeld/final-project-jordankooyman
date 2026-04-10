@@ -27,7 +27,7 @@ This project implements a userspace SPI display driver for the ILI9488 LCD contr
 - **SPI device:** `/dev/spidev0.0`
 - **GPIO:** Reset line controlled via `libgpiod`
 
-Wiring details are documented in `docs/wiring.md` in the ILI9488 or LD7138 repositories.
+Wiring details are documented in `docs/wiring.md` in the [ILI9488](https://github.com/jordankooyman/ili9488-userspace-driver) or [LD7138](https://github.com/jordankooyman/ld7138-userspace-driver) repositories.
 
 ## Repository Structure
 ```
@@ -86,6 +86,8 @@ If you need a login prompt over serial during development:
 - 115200 baud, 8N1, no flow control
 - The console is on `ttyS0` (the mini UART, not the PL011)
   - This configuration means the CPU Clock speed is fixed in this image
+- Username: root
+- Password: root
 
 ## Runtime Behavior
 
@@ -98,7 +100,9 @@ The demo runs continuously and cycles through:
 3. A center-out starburst line sweep
 4. Additional full-screen color fills
 
-SSH is available via Dropbear. The root password is `root`. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
+SSH is available via Dropbear. Ethernet will attempt DHCP on `eth0` at boot. WiFi is not included in this image.
+- Username: root
+- Password: root
 
 ## Development Notes
 
